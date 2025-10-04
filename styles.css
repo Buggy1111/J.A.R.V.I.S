@@ -1,0 +1,324 @@
+/* Styl chatovacího okna inspirovaný Iron Manem */
+.gpt-vision-chat {
+  position: fixed;
+  bottom: 20px; /* Vzdálenost od spodního okraje */
+  right: 20px; /* Vzdálenost od pravého okraje */
+  width: 300px; /* Upravená šířka okna */
+  max-width: 90%; /* Maximální šířka pro menší obrazovky */
+  max-height: 500px; /* Nastavení pevné maximální výšky chatu */
+  background: linear-gradient(135deg, #ff0000, #8b0000); /* Gradient ve stylu Iron Mana */
+  color: #ffffff; /* Barva textu */
+  border-radius: 12px; /* Zaoblené rohy */
+  box-shadow: 0 4px 12px rgba(255, 69, 0, 0.6); /* Stín pro zvýraznění */
+  font-family: 'Roboto', Arial, sans-serif; /* Moderní font */
+  z-index: 10000; /* Umístění nad ostatními prvky */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Zajištění správného zarovnání */
+  border: 2px solid #ffd700; /* Zlatý okraj */
+  animation: slideIn 0.5s ease forwards; /* Přechod při zobrazení */
+  will-change: transform, opacity;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ffd700, transparent 30%, #ff4500);
+    z-index: -1;
+    animation: scanline 6s linear infinite;
+    opacity: 0.3;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    bottom: -100%;
+  }
+  100% {
+    bottom: 20px;
+  }
+}
+
+@keyframes scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 300px 300px; }
+}
+
+.gpt-vision-chat.minimized {
+  height: 50px; /* Výška minimalizovaného okna */
+  overflow: hidden;
+  opacity: 0.3; /* Průsvitnost 30% */
+  pointer-events: auto; /* Povolit interakce, když je myš najetá */
+  animation: minimize 0.3s ease forwards;
+  transition: opacity 0.3s ease; /* Plynulý přechod */
+  &::after {
+    content: "🦾 JARVIS";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffd700;
+    font-size: 9px;
+    opacity: 0.8;
+  }
+}
+
+@keyframes minimize {
+  0% {
+    height: 60%;
+  }
+  100% {
+    height: 50px;
+  }
+}
+
+.chat-header {
+  background: #8b0000; /* Tmavě červená */
+  color: #ffd700; /* Zlatá barva pro text */
+  padding: 8px; /* Upravené zmenšení paddingu */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer; /* Přepínání minimalizace */
+  transform-style: preserve-3d;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 9px; /* Menší velikost textu v hlavičce */
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  transform: translateZ(20px);
+}
+
+.chat-header button {
+  background: none;
+  border: none;
+  color: #ffd700; /* Zlatá barva */
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chat-header button.minimize-btn {
+  font-size: 16px; /* Menší velikost tlačítka minimalizace */
+  background: #ff4500;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: 1px solid #ffd700;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 10px; /* Zmenšené paddingy */
+  overflow-y: auto; /* Povolení rolování celým chatem */
+  max-height: 400px; /* Pevná maximální výška těla chatu */
+  background: #1e1e1e; /* Tmavě šedá */
+  scrollbar-width: thin; /* Šířka posuvníku pro moderní prohlížeče */
+  scrollbar-color: #ffd700 #1e1e1e; /* Barvy posuvníku ve stylu Iron Mana */
+  backdrop-filter: blur(4px);
+}
+
+.chat-body::-webkit-scrollbar {
+  width: 8px; /* Šířka posuvníku pro WebKit prohlížeče */
+}
+
+.chat-body::-webkit-scrollbar-track {
+  background: #1e1e1e; /* Barva pozadí dráhy posuvníku */
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #ffd700, #ff4500);
+  border-radius: 10px; /* Zaoblení posuvníku */
+  border: 1px solid #8b0000;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80%;
+  line-height: 1.5;
+  word-wrap: break-word;
+  font-size: 11px;
+  opacity: 0; /* Výchozí skrytí */
+  transform: translateY(10px); /* Posun směrem dolů */
+  animation: fadeInUp 0.5s ease forwards; /* Animace zobrazení */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-message.user {
+  background: #ff4500; /* Oranžová barva ve stylu Iron Mana */
+  color: #fff;
+  align-self: flex-end;
+  border: 1px solid #ffd700; /* Zlatý okraj */
+  &:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(255, 69, 0, 0.8);
+  }
+}
+
+.chat-message.assistant {
+  background: #444; /* Tmavě šedá pro asistenta */
+  color: #fff;
+  align-self: flex-start;
+  border: 1px solid #ffd700; /* Zlatý okraj */
+  &:hover {
+    transform: translateX(-5px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  }
+}
+
+.chat-footer {
+  display: flex;
+  padding: 10px; /* Zmenšený padding */
+  background: #8b0000; /* Tmavě červená */
+  border-top: 2px solid #ffd700; /* Zlatý okraj nahoře */
+  align-items: center;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 8px; /* Zmenšené paddingy */
+  font-size: 11px;
+  border: 1px solid #666;
+  border-radius: 8px;
+  background: #1e1e1e;
+  color: #fff;
+  outline: none;
+  &:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+  }
+}
+
+.chat-input::placeholder {
+  color: #999;
+}
+
+.chat-send-btn {
+  background: #ff4500;
+  color: #ffd700; /* Zlatá barva */
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease; /* Efekty */
+  position: relative;
+  overflow: hidden;
+  &:hover {
+    background: #ff6347; /* Světlejší červená při hoveru */
+    transform: scale(1.1); /* Zvětšení při hoveru */
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.4) 10%, transparent 70%);
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 0.3; }
+  100% { transform: scale(0.8); opacity: 0.6; }
+}
+
+.chat-typing-indicator {
+  font-style: italic;
+  color: #ffd700;
+  margin-top: 10px;
+  text-align: left;
+  font-size: 11px;
+  display: none; /* Skryté ve výchozím stavu */
+  animation: blink 1.5s infinite; /* Efekt blikání */
+  &::after {
+    content: "🛡";
+    display: inline-block;
+    margin-left: 5px;
+    animation: shield-pulse 1s infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes shield-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.voice-assistant-btn {
+  background: url('mic-icon.svg') no-repeat;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  transition: transform 0.3s;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .gpt-vision-chat {
+    width: 95%;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .chat-body {
+    padding: 10px;
+  }
+
+  .chat-input {
+    font-size: 11px;
+  }
+
+  .chat-send-btn {
+    padding: 8px 12px;
+  }
+}
+
+:root {
+  --iron-red: #8b0000;
+  --iron-gold: #ffd700;
+  --energy-core: #ff4500;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --iron-red: #ff0000;
+    --iron-gold: #daa520;
+    --energy-core: #ff6347;
+  }
+}
